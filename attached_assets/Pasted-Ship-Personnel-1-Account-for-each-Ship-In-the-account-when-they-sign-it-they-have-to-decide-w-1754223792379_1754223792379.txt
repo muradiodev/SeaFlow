@@ -1,0 +1,41 @@
+Ship Personnel:
+
+
+1 Account for each Ship. In the account when they sign it they have to decide who will sign or edit or report.
+
+Office Personnel:
+- DPA - Who will approve the all reports. Also Ship adding creating users or etc.
+- Super intendent - some documents should be approved by DPA and Super Intendent. Some critical decisions
+- Other operators - have less permission (viewer readonly permission)
+
+
+What windows/modules will be in the system? (Main Modules)
+- Dashboard (Central panel for ship and process status) - for example some updates some insights like fleet statuses or etc.
+- Certificates - It should be added by Office personal and Ships as well, it is shared space. there are so many ships therefore Managers should see all ships however
+ship when they enter should see only theirs. This is relationship.
+
+- Document Management - Formulars for example (120 total, 100 is recurrance, however 20 only one time. and should be shown differently not mixed to each others)
+- - this formular should be notified to ships. For example there is a formular since 2012 it works no need to update, however for the next quartal Office personal should add time and kinda open windows/modules
+and during this time period all ships should get notification and also fill out and sign the formular for this time windows period. and here should be for ships a place who signed (captain or other staff) and submit.
+There is no time recurrence should be setted. Like repeat every 1 week or every custom or etc. Should be all possibilities and should be edited every time. The main core feature of this system. And here should be seem
+which ships have not filled out yet, then notify functionality to get reminder in their system when they become online.
+- - some formulars are only one time for example defect formular. This formular is always exists however it is not mandatory recurrencely to fill this out. However only when it is needed they will fill this out
+- - in the formular when to click i should see also ships' history when they filled out and when is still open or they did not. the page should be very clear for manager. and also for the ship. Ship should see only its own
+history.
+- - add some custom field to some formular design for example for incident formular manager should add a new custom field and ask question like How many people died in incident. and input there. and it is required or optional like google form
+
+
+
+- User & Role Management (add roles, manage permissions)
+- Notification history
+- Manuals section - it should be in editable, for example some updates can be done by office management and it should be seem also for the ships that when is the last update and version of the Document.
+Photo Diagrams and text format.
+- - Search bar only in manuals, for example where i can find plates in ship, then result should show this article for them.
+- History of Logs: only for managers. Who did and when did this action. Even for ships and even for office personnel.
+
+- KPI - we do have 15 kpis and it should be collected based on the Formular. And more statistics For example
+- - The overall number of the incidents per ships vs fleet
+- - The total number of deficiencies per inspection
+- - The total number of the near misses per vessel
+
+

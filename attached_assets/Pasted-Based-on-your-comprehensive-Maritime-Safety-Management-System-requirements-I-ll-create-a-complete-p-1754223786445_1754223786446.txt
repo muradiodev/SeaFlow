@@ -1,0 +1,561 @@
+Based on your comprehensive Maritime Safety Management System requirements, I'll create a complete project structure for Replit and database schema.
+
+## Project Structure for Replit
+
+````
+maritime-sms/
+├── backend/
+│   ├── src/
+│   │   ├── controllers/
+│   │   │   ├── authController.js
+│   │   │   ├── dashboardController.js
+│   │   │   ├── certificateController.js
+│   │   │   ├── documentController.js
+│   │   │   ├── formController.js
+│   │   │   ├── userController.js
+│   │   │   ├── notificationController.js
+│   │   │   ├── manualController.js
+│   │   │   ├── kpiController.js
+│   │   │   └── syncController.js
+│   │   ├── models/
+│   │   │   ├── User.js
+│   │   │   ├── Ship.js
+│   │   │   ├── Certificate.js
+│   │   │   ├── Document.js
+│   │   │   ├── Form.js
+│   │   │   ├── FormSubmission.js
+│   │   │   ├── Notification.js
+│   │   │   ├── Manual.js
+│   │   │   ├── AuditLog.js
+│   │   │   └── KPI.js
+│   │   ├── middleware/
+│   │   │   ├── auth.js
+│   │   │   ├── roleCheck.js
+│   │   │   ├── validation.js
+│   │   │   └── syncMiddleware.js
+│   │   ├── routes/
+│   │   │   ├── auth.js
+│   │   │   ├── dashboard.js
+│   │   │   ├── certificates.js
+│   │   │   ├── documents.js
+│   │   │   ├── forms.js
+│   │   │   ├── users.js
+│   │   │   ├── notifications.js
+│   │   │   ├── manuals.js
+│   │   │   ├── kpi.js
+│   │   │   └── sync.js
+│   │   ├── services/
+│   │   │   ├── syncService.js
+│   │   │   ├── notificationService.js
+│   │   │   ├── emailService.js
+│   │   │   ├── fileService.js
+│   │   │   ├── encryptionService.js
+│   │   │   └── kpiCalculationService.js
+│   │   ├── utils/
+│   │   │   ├── database.js
+│   │   │   ├── logger.js
+│   │   │   ├── validators.js
+│   │   │   ├── constants.js
+│   │   │   └── helpers.js
+│   │   ├── config/
+│   │   │   ├── database.js
+│   │   │   ├── auth.js
+│   │   │   ├── sync.js
+│   │   │   └── environment.js
+│   │   └── app.js
+│   ├── tests/
+│   │   ├── unit/
+│   │   ├── integration/
+│   │   └── e2e/
+│   ├── package.json
+│   └── server.js
+├── frontend/
+│   ├── public/
+│   │   ├── index.html
+│   │   ├── manifest.json
+│   │   └── icons/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── common/
+│   │   │   │   ├── Header.jsx
+│   │   │   │   ├── Sidebar.jsx
+│   │   │   │   ├── Footer.jsx
+│   │   │   │   ├── LoadingSpinner.jsx
+│   │   │   │   ├── Modal.jsx
+│   │   │   │   ├── DataTable.jsx
+│   │   │   │   └── FormBuilder.jsx
+│   │   │   ├── auth/
+│   │   │   │   ├── Login.jsx
+│   │   │   │   ├── Register.jsx
+│   │   │   │   └── ForgotPassword.jsx
+│   │   │   ├── dashboard/
+│   │   │   │   ├── Dashboard.jsx
+│   │   │   │   ├── ShipStatus.jsx
+│   │   │   │   ├── FleetOverview.jsx
+│   │   │   │   └── Insights.jsx
+│   │   │   ├── certificates/
+│   │   │   │   ├── CertificateList.jsx
+│   │   │   │   ├── CertificateForm.jsx
+│   │   │   │   ├── CertificateView.jsx
+│   │   │   │   └── ExpiryAlerts.jsx
+│   │   │   ├── documents/
+│   │   │   │   ├── DocumentManager.jsx
+│   │   │   │   ├── FormList.jsx
+│   │   │   │   ├── FormBuilder.jsx
+│   │   │   │   ├── FormSubmission.jsx
+│   │   │   │   ├── RecurringForms.jsx
+│   │   │   │   ├── OneTimeForms.jsx
+│   │   │   │   └── FormHistory.jsx
+│   │   │   ├── users/
+│   │   │   │   ├── UserManagement.jsx
+│   │   │   │   ├── RoleManagement.jsx
+│   │   │   │   └── PermissionMatrix.jsx
+│   │   │   ├── notifications/
+│   │   │   │   ├── NotificationCenter.jsx
+│   │   │   │   ├── NotificationHistory.jsx
+│   │   │   │   └── NotificationSettings.jsx
+│   │   │   ├── manuals/
+│   │   │   │   ├── ManualList.jsx
+│   │   │   │   ├── ManualEditor.jsx
+│   │   │   │   ├── ManualViewer.jsx
+│   │   │   │   └── ManualSearch.jsx
+│   │   │   ├── kpi/
+│   │   │   │   ├── KPIDashboard.jsx
+│   │   │   │   ├── Statistics.jsx
+│   │   │   │   ├── Reports.jsx
+│   │   │   │   └── Charts.jsx
+│   │   │   └── sync/
+│   │   │       ├── SyncStatus.jsx
+│   │   │       ├── OfflineIndicator.jsx
+│   │   │       └── SyncManager.jsx
+│   │   ├── hooks/
+│   │   │   ├── useAuth.js
+│   │   │   ├── useSync.js
+│   │   │   ├── useNotifications.js
+│   │   │   ├── useOffline.js
+│   │   │   └── usePermissions.js
+│   │   ├── services/
+│   │   │   ├── api.js
+│   │   │   ├── authService.js
+│   │   │   ├── syncService.js
+│   │   │   ├── notificationService.js
+│   │   │   ├── offlineService.js
+│   │   │   └── storageService.js
+│   │   ├── store/
+│   │   │   ├── index.js
+│   │   │   ├── authSlice.js
+│   │   │   ├── syncSlice.js
+│   │   │   ├── notificationSlice.js
+│   │   │   ├── documentSlice.js
+│   │   │   └── userSlice.js
+│   │   ├── utils/
+│   │   │   ├── constants.js
+│   │   │   ├── helpers.js
+│   │   │   ├── validators.js
+│   │   │   └── formatters.js
+│   │   ├── styles/
+│   │   │   ├── globals.css
+│   │   │   ├── components.css
+│   │   │   └── themes.css
+│   │   ├── App.jsx
+│   │   └── index.js
+│   ├── package.json
+│   └── webpack.config.js
+├── mobile/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── screens/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   └── App.js
+│   ├── package.json
+│   └── app.json
+├── database/
+│   ├── migrations/
+│   │   ├── 001_create_users_table.sql
+│   │   ├── 002_create_ships_table.sql
+│   │   ├── 003_create_certificates_table.sql
+│   │   ├── 004_create_documents_table.sql
+│   │   ├── 005_create_forms_table.sql
+│   │   ├── 006_create_form_submissions_table.sql
+│   │   ├── 007_create_notifications_table.sql
+│   │   ├── 008_create_manuals_table.sql
+│   │   ├── 009_create_audit_logs_table.sql
+│   │   └── 010_create_kpis_table.sql
+│   ├── seeds/
+│   │   ├── users.sql
+│   │   ├── ships.sql
+│   │   ├── forms.sql
+│   │   └── kpis.sql
+│   └── schema.sql
+├── docs/
+│   ├── api/
+│   ├── deployment/
+│   ├── user-guides/
+│   └── technical/
+├── docker/
+│   ├── Dockerfile.backend
+│   ├── Dockerfile.frontend
+│   └── docker-compose.yml
+├── scripts/
+│   ├── setup.sh
+│   ├── deploy.sh
+│   └── backup.sh
+├── .env.example
+├── .gitignore
+├── README.md
+├── package.json
+└── replit.nix
+````
+
+## Database Structure (PostgreSQL)
+
+### Core Tables
+
+````sql
+-- Users Table
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    username VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    role ENUM('ship_captain', 'ship_crew', 'dpa', 'superintendent', 'operator') NOT NULL,
+    ship_id UUID REFERENCES ships(id),
+    is_active BOOLEAN DEFAULT true,
+    last_login TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Ships Table
+CREATE TABLE ships (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(200) NOT NULL,
+    imo_number VARCHAR(20) UNIQUE NOT NULL,
+    flag_state VARCHAR(100),
+    ship_type VARCHAR(100),
+    gross_tonnage INTEGER,
+    built_year INTEGER,
+    classification_society VARCHAR(100),
+    is_active BOOLEAN DEFAULT true,
+    last_sync TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Certificates Table
+CREATE TABLE certificates (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    ship_id UUID REFERENCES ships(id),
+    certificate_type VARCHAR(200) NOT NULL,
+    certificate_name VARCHAR(300) NOT NULL,
+    issuing_authority VARCHAR(200),
+    certificate_number VARCHAR(100),
+    issue_date DATE,
+    expiry_date DATE,
+    file_path VARCHAR(500),
+    status ENUM('valid', 'expired', 'expiring_soon') DEFAULT 'valid',
+    created_by UUID REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Forms Table (Template)
+CREATE TABLE forms (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(300) NOT NULL,
+    description TEXT,
+    form_type ENUM('recurring', 'one_time') NOT NULL,
+    recurrence_pattern JSONB, -- {type: 'weekly', interval: 1, days: [1,2,3]}
+    is_active BOOLEAN DEFAULT true,
+    requires_approval BOOLEAN DEFAULT false,
+    approval_roles JSONB, -- ['dpa', 'superintendent']
+    form_fields JSONB NOT NULL, -- Dynamic form structure
+    created_by UUID REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Form Instances (Active periods for recurring forms)
+CREATE TABLE form_instances (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    form_id UUID REFERENCES forms(id),
+    instance_name VARCHAR(300),
+    start_date TIMESTAMP NOT NULL,
+    end_date TIMESTAMP NOT NULL,
+    is_active BOOLEAN DEFAULT true,
+    created_by UUID REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Form Submissions
+CREATE TABLE form_submissions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    form_id UUID REFERENCES forms(id),
+    form_instance_id UUID REFERENCES form_instances(id),
+    ship_id UUID REFERENCES ships(id),
+    submitted_by UUID REFERENCES users(id),
+    submission_data JSONB NOT NULL, -- Form field values
+    attachments JSONB, -- File paths and metadata
+    status ENUM('draft', 'submitted', 'approved', 'rejected') DEFAULT 'draft',
+    digital_signature JSONB, -- Signature metadata
+    approved_by UUID REFERENCES users(id),
+    approved_at TIMESTAMP,
+    submitted_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Documents Table (General document management)
+CREATE TABLE documents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title VARCHAR(300) NOT NULL,
+    document_type VARCHAR(100),
+    category VARCHAR(100),
+    file_path VARCHAR(500),
+    file_size BIGINT,
+    mime_type VARCHAR(100),
+    version VARCHAR(20) DEFAULT '1.0',
+    ship_id UUID REFERENCES ships(id),
+    is_public BOOLEAN DEFAULT false,
+    created_by UUID REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Notifications Table
+CREATE TABLE notifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    recipient_id UUID REFERENCES users(id),
+    ship_id UUID REFERENCES ships(id),
+    title VARCHAR(300) NOT NULL,
+    message TEXT NOT NULL,
+    notification_type ENUM('form_deadline', 'certificate_expiry', 'system_update', 'approval_request', 'general') NOT NULL,
+    priority ENUM('low', 'medium', 'high', 'critical') DEFAULT 'medium',
+    is_read BOOLEAN DEFAULT false,
+    related_entity_type VARCHAR(100), -- 'form', 'certificate', etc.
+    related_entity_id UUID,
+    scheduled_at TIMESTAMP,
+    sent_at TIMESTAMP,
+    read_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Manuals Table
+CREATE TABLE manuals (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title VARCHAR(300) NOT NULL,
+    content TEXT,
+    category VARCHAR(100),
+    tags JSONB, -- For search functionality
+    version VARCHAR(20) DEFAULT '1.0',
+    file_attachments JSONB, -- Photos, diagrams
+    is_searchable BOOLEAN DEFAULT true,
+    last_updated_by UUID REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Audit Logs Table
+CREATE TABLE audit_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id),
+    ship_id UUID REFERENCES ships(id),
+    action VARCHAR(100) NOT NULL,
+    entity_type VARCHAR(100) NOT NULL, -- 'form', 'certificate', 'user', etc.
+    entity_id UUID,
+    old_values JSONB,
+    new_values JSONB,
+    ip_address INET,
+    user_agent TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- KPIs Table
+CREATE TABLE kpis (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(200) NOT NULL,
+    description TEXT,
+    calculation_formula TEXT, -- How to calculate this KPI
+    data_source VARCHAR(100), -- Which forms/tables to use
+    category VARCHAR(100),
+    unit VARCHAR(50),
+    target_value DECIMAL(10,2),
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- KPI Values Table (Historical data)
+CREATE TABLE kpi_values (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    kpi_id UUID REFERENCES kpis(id),
+    ship_id UUID REFERENCES ships(id),
+    period_start DATE,
+    period_end DATE,
+    value DECIMAL(10,2),
+    calculated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Sync Status Table (For offline synchronization)
+CREATE TABLE sync_status (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    ship_id UUID REFERENCES ships(id),
+    entity_type VARCHAR(100) NOT NULL,
+    entity_id UUID NOT NULL,
+    action ENUM('create', 'update', 'delete') NOT NULL,
+    sync_status ENUM('pending', 'synced', 'failed') DEFAULT 'pending',
+    data JSONB, -- Entity data to sync
+    error_message TEXT,
+    attempts INTEGER DEFAULT 0,
+    last_attempt TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- User Sessions Table (For authentication)
+CREATE TABLE user_sessions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id),
+    session_token VARCHAR(500) NOT NULL,
+    device_info JSONB,
+    ip_address INET,
+    expires_at TIMESTAMP NOT NULL,
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- File Uploads Table
+CREATE TABLE file_uploads (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    original_name VARCHAR(300),
+    stored_name VARCHAR(300),
+    file_path VARCHAR(500),
+    file_size BIGINT,
+    mime_type VARCHAR(100),
+    uploaded_by UUID REFERENCES users(id),
+    entity_type VARCHAR(100), -- What this file belongs to
+    entity_id UUID,
+    is_temporary BOOLEAN DEFAULT false,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+````
+
+### Indexes for Performance
+
+````sql
+-- Performance Indexes
+CREATE INDEX idx_users_ship_id ON users(ship_id);
+CREATE INDEX idx_users_role ON users(role);
+CREATE INDEX idx_certificates_ship_id ON certificates(ship_id);
+CREATE INDEX idx_certificates_expiry_date ON certificates(expiry_date);
+CREATE INDEX idx_form_submissions_ship_id ON form_submissions(ship_id);
+CREATE INDEX idx_form_submissions_status ON form_submissions(status);
+CREATE INDEX idx_notifications_recipient_id ON notifications(recipient_id);
+CREATE INDEX idx_notifications_is_read ON notifications(is_read);
+CREATE INDEX idx_audit_logs_user_id ON audit_logs(user_id);
+CREATE INDEX idx_audit_logs_created_at ON audit_logs(created_at);
+CREATE INDEX idx_sync_status_ship_id ON sync_status(ship_id);
+CREATE INDEX idx_sync_status_sync_status ON sync_status(sync_status);
+CREATE INDEX idx_kpi_values_ship_id ON kpi_values(ship_id);
+CREATE INDEX idx_kpi_values_period ON kpi_values(period_start, period_end);
+````
+
+### Sample Package.json Files
+
+**Root package.json:**
+````json
+{
+  "name": "maritime-sms",
+  "version": "1.0.0",
+  "description": "Maritime Safety Management System",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm start",
+    "build": "cd frontend && npm run build",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && npm test"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
+````
+
+**Backend package.json:**
+````json
+{
+  "name": "maritime-sms-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "test": "jest",
+    "migrate": "node scripts/migrate.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg": "^8.8.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.0",
+    "multer": "^1.4.5",
+    "cors": "^2.8.5",
+    "helmet": "^6.0.1",
+    "rate-limiter-flexible": "^2.4.1",
+    "node-cron": "^3.0.2",
+    "nodemailer": "^6.8.0",
+    "socket.io": "^4.6.1",
+    "joi": "^17.7.0",
+    "winston": "^3.8.2",
+    "compression": "^1.7.4",
+    "express-rate-limit": "^6.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20",
+    "jest": "^29.3.1",
+    "supertest": "^6.3.3"
+  }
+}
+````
+
+**Frontend package.json:**
+````json
+{
+  "name": "maritime-sms-frontend",
+  "version": "1.0.0",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.6.1",
+    "redux": "^4.2.0",
+    "react-redux": "^8.0.5",
+    "@reduxjs/toolkit": "^1.9.1",
+    "axios": "^1.2.2",
+    "socket.io-client": "^4.6.1",
+    "react-hook-form": "^7.41.5",
+    "react-table": "^7.8.0",
+    "recharts": "^2.5.0",
+    "react-datepicker": "^4.8.0",
+    "react-select": "^5.7.0",
+    "react-dropzone": "^14.2.3",
+    "react-signature-canvas": "^1.0.6",
+    "dexie": "^3.2.2",
+    "workbox-webpack-plugin": "^6.5.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "react-scripts": "5.0.1"
+  }
+}
+````
+
+This structure provides a comprehensive foundation for your Maritime Safety Management System with proper separation of concerns, scalability considerations, and all the modules you specified. The database schema supports all your requirements including role-based access, form management, synchronization, and KPI tracking.
