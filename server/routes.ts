@@ -148,6 +148,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.put("/api/forms/:id", requireRole(['dpa', 'superintendent']), async (req, res) => {
+    try {
+      const form = await storage.updateForm(req.params.id, {
+        ...req.body,
+        updatedAt: new Date()
+      });
+      if (!form) {
+        return res.status(404).json({ message: "Form not found" });
+      }
+      await storage.createAuditLog(req.user!.id, 'UPDATE', 'form', form.id, null, form);
+      res.json(form);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update form" });
+    }
+  });
+
+  app.post("/api/forms", requireRole(['dpa', 'superintendent']), async (req, res) => {
+    try {
+      const form = await storage.createForm({
+        ...req.body,
+        createdBy: req.user!.id
+      });
+      await storage.createAuditLog(req.user!.id, 'CREATE', 'form', form.id, null, form);
+      res.status(201).json(form);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create form" });
+    }
+  });
+
   // Form submissions routes
   app.get("/api/form-submissions", requireAuth, async (req, res) => {
     try {

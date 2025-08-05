@@ -30,129 +30,7 @@ import {
   Play
 } from "lucide-react";
 
-export default function Documents() {
-  const { user } = useAuth();
-  const { toast } = useToast();
-  const params = useParams();
-  const [, setLocation] = useLocation();
-  const [isFormBuilderOpen, setIsFormBuilderOpen] = useState(false);
-  const [selectedForm, setSelectedForm] = useState<Form | null>(null);
-  const [viewMode, setViewMode] = useState<'view' | 'edit' | 'fill'>('view');
-  const currentTab = params.tab || 'recurring';
-
-  const { data: forms, isLoading: formsLoading } = useQuery<Form[]>({
-    queryKey: ["/api/forms"],
-  });
-
-  const { data: submissions, isLoading: submissionsLoading } = useQuery<FormSubmission[]>({
-    queryKey: ["/api/form-submissions"],
-  });
-
-  const canCreateForms = user?.role === 'dpa' || user?.role === 'superintendent';
-  const canEditForms = user?.role === 'dpa' || user?.role === 'superintendent';
-  const canFillForms = true; // All authenticated users can fill forms
-
-  // Handler functions for form actions
-  const handleViewForm = (form: Form) => {
-    setSelectedForm(form);
-    setViewMode('view');
-    setIsFormBuilderOpen(true);
-  };
-
-  const handleEditForm = (form: Form) => {
-    if (!canEditForms) {
-      toast({
-        title: "Access Denied",
-        description: "You don't have permission to edit forms.",
-        variant: "destructive",
-      });
-      return;
-    }
-    setSelectedForm(form);
-    setViewMode('edit');
-    setIsFormBuilderOpen(true);
-  };
-
-  const handleFillForm = (form: Form) => {
-    setSelectedForm(form);
-    setViewMode('fill');
-    toast({
-      title: "Opening Form",
-      description: `Opening ${form.name} for completion.`,
-    });
-    // TODO: Implement form filling functionality
-  };
-
-  const handleViewSubmission = (submission: FormSubmission) => {
-    toast({
-      title: "Opening Submission",
-      description: "Viewing form submission details.",
-    });
-    // TODO: Implement submission viewing functionality
-  };
-
-  const handleContinueSubmission = (submission: FormSubmission) => {
-    toast({
-      title: "Continuing Submission",
-      description: "Opening draft submission for completion.",
-    });
-    // TODO: Implement draft continuation functionality
-  };
-
-  const createFormMutation = useMutation({
-    mutationFn: async (data: any) => {
-      const res = await apiRequest("POST", "/api/forms", data);
-      return res.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/forms"] });
-      setIsFormBuilderOpen(false);
-      setSelectedForm(null);
-      toast({
-        title: "Form created",
-        description: "The form has been successfully created.",
-      });
-    },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "Failed to create form.",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const updateFormMutation = useMutation({
-    mutationFn: async (data: any) => {
-      const res = await apiRequest("PUT", `/api/forms/${selectedForm?.id}`, data);
-      return res.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/forms"] });
-      setIsFormBuilderOpen(false);
-      setSelectedForm(null);
-      toast({
-        title: "Form updated",
-        description: "The form has been successfully updated.",
-      });
-    },
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "Failed to update form.",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const handleTabChange = (value: string) => {
-    setLocation(`/documents/${value}`);
-  };
-
-  const recurringForms = forms?.filter(f => f.formType === 'recurring') || [];
-  const oneTimeForms = forms?.filter(f => f.formType === 'one_time') || [];
-
-  // Form columns with action handlers
+  // Move formColumns inside component to access handler functions
   const formColumns: ColumnDef<Form>[] = [
     {
       accessorKey: "name",
@@ -247,6 +125,128 @@ export default function Documents() {
     },
   ];
 
+export default function Documents() {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const params = useParams();
+  const [, setLocation] = useLocation();
+  const [isFormBuilderOpen, setIsFormBuilderOpen] = useState(false);
+  const [selectedForm, setSelectedForm] = useState<Form | null>(null);
+  const [viewMode, setViewMode] = useState<'view' | 'edit' | 'fill'>('view');
+  const currentTab = params.tab || 'recurring';
+
+  const { data: forms, isLoading: formsLoading } = useQuery<Form[]>({
+    queryKey: ["/api/forms"],
+  });
+
+  const { data: submissions, isLoading: submissionsLoading } = useQuery<FormSubmission[]>({
+    queryKey: ["/api/form-submissions"],
+  });
+
+  const canCreateForms = user?.role === 'dpa' || user?.role === 'superintendent';
+  const canEditForms = user?.role === 'dpa' || user?.role === 'superintendent';
+  const canFillForms = true; // All authenticated users can fill forms
+
+  // Handler functions for form actions
+  const handleViewForm = (form: Form) => {
+    setSelectedForm(form);
+    setViewMode('view');
+    setIsFormBuilderOpen(true);
+  };
+
+  const handleEditForm = (form: Form) => {
+    if (!canEditForms) {
+      toast({
+        title: "Access Denied",
+        description: "You don't have permission to edit forms.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setSelectedForm(form);
+    setViewMode('edit');
+    setIsFormBuilderOpen(true);
+  };
+
+  const handleFillForm = (form: Form) => {
+    setSelectedForm(form);
+    setViewMode('fill');
+    // Navigate to form filling page or open form filling dialog
+    toast({
+      title: "Opening Form",
+      description: `Opening ${form.name} for completion.`,
+    });
+    // TODO: Implement form filling functionality
+  };
+
+  const handleViewSubmission = (submission: FormSubmission) => {
+    toast({
+      title: "Opening Submission",
+      description: "Viewing form submission details.",
+    });
+    // TODO: Implement submission viewing functionality
+  };
+
+  const handleContinueSubmission = (submission: FormSubmission) => {
+    toast({
+      title: "Continuing Submission",
+      description: "Opening draft submission for completion.",
+    });
+    // TODO: Implement draft continuation functionality
+  };
+
+  const createFormMutation = useMutation({
+    mutationFn: async (data: any) => {
+      const res = await apiRequest("POST", "/api/forms", data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/forms"] });
+      setIsFormBuilderOpen(false);
+      toast({
+        title: "Form created",
+        description: "The form has been successfully created.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to create form.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateFormMutation = useMutation({
+    mutationFn: async (data: any) => {
+      const res = await apiRequest("PUT", `/api/forms/${selectedForm?.id}`, data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/forms"] });
+      setIsFormBuilderOpen(false);
+      setSelectedForm(null);
+      toast({
+        title: "Form updated",
+        description: "The form has been successfully updated.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to update form.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleTabChange = (value: string) => {
+    setLocation(`/documents/${value}`);
+  };
+
+  const recurringForms = forms?.filter(f => f.formType === 'recurring') || [];
+  const oneTimeForms = forms?.filter(f => f.formType === 'one_time') || [];
+
   const submissionColumns: ColumnDef<FormSubmission>[] = [
     {
       accessorKey: "createdAt",
@@ -307,6 +307,128 @@ export default function Documents() {
       ),
     },
   ];
+
+export default function Documents() {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const params = useParams();
+  const [, setLocation] = useLocation();
+  const [isFormBuilderOpen, setIsFormBuilderOpen] = useState(false);
+  const [selectedForm, setSelectedForm] = useState<Form | null>(null);
+  const [viewMode, setViewMode] = useState<'view' | 'edit' | 'fill'>('view');
+  const currentTab = params.tab || 'recurring';
+
+  const { data: forms, isLoading: formsLoading } = useQuery<Form[]>({
+    queryKey: ["/api/forms"],
+  });
+
+  const { data: submissions, isLoading: submissionsLoading } = useQuery<FormSubmission[]>({
+    queryKey: ["/api/form-submissions"],
+  });
+
+  const createFormMutation = useMutation({
+    mutationFn: async (data: any) => {
+      const res = await apiRequest("POST", "/api/forms", data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/forms"] });
+      setIsFormBuilderOpen(false);
+      toast({
+        title: "Form created",
+        description: "The form has been successfully created.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to create form.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleTabChange = (value: string) => {
+    setLocation(`/documents/${value}`);
+  };
+
+  const recurringForms = forms?.filter(f => f.formType === 'recurring') || [];
+  const oneTimeForms = forms?.filter(f => f.formType === 'one_time') || [];
+
+  const canCreateForms = user?.role === 'dpa' || user?.role === 'superintendent';
+  const canEditForms = user?.role === 'dpa' || user?.role === 'superintendent';
+  const canFillForms = true; // All authenticated users can fill forms
+
+  // Handler functions for form actions
+  const handleViewForm = (form: Form) => {
+    setSelectedForm(form);
+    setViewMode('view');
+    setIsFormBuilderOpen(true);
+  };
+
+  const handleEditForm = (form: Form) => {
+    if (!canEditForms) {
+      toast({
+        title: "Access Denied",
+        description: "You don't have permission to edit forms.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setSelectedForm(form);
+    setViewMode('edit');
+    setIsFormBuilderOpen(true);
+  };
+
+  const handleFillForm = (form: Form) => {
+    setSelectedForm(form);
+    setViewMode('fill');
+    // Navigate to form filling page or open form filling dialog
+    toast({
+      title: "Opening Form",
+      description: `Opening ${form.name} for completion.`,
+    });
+    // TODO: Implement form filling functionality
+  };
+
+  const handleViewSubmission = (submission: FormSubmission) => {
+    toast({
+      title: "Opening Submission",
+      description: "Viewing form submission details.",
+    });
+    // TODO: Implement submission viewing functionality
+  };
+
+  const handleContinueSubmission = (submission: FormSubmission) => {
+    toast({
+      title: "Continuing Submission",
+      description: "Opening draft submission for completion.",
+    });
+    // TODO: Implement draft continuation functionality
+  };
+
+  const updateFormMutation = useMutation({
+    mutationFn: async (data: any) => {
+      const res = await apiRequest("PUT", `/api/forms/${selectedForm?.id}`, data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/forms"] });
+      setIsFormBuilderOpen(false);
+      setSelectedForm(null);
+      toast({
+        title: "Form updated",
+        description: "The form has been successfully updated.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to update form.",
+        variant: "destructive",
+      });
+    },
+  });
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
@@ -417,11 +539,7 @@ export default function Documents() {
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No recurring forms</h3>
                     <p className="text-gray-500 mb-4">There are no recurring forms available yet.</p>
                     {canCreateForms && (
-                      <Button onClick={() => {
-                        setSelectedForm(null);
-                        setViewMode('view');
-                        setIsFormBuilderOpen(true);
-                      }}>
+                      <Button onClick={() => setIsFormBuilderOpen(true)}>
                         Create First Form
                       </Button>
                     )}
@@ -479,11 +597,7 @@ export default function Documents() {
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">No one-time forms</h3>
                     <p className="text-gray-500 mb-4">There are no one-time forms available.</p>
                     {canCreateForms && (
-                      <Button onClick={() => {
-                        setSelectedForm(null);
-                        setViewMode('view');
-                        setIsFormBuilderOpen(true);
-                      }}>
+                      <Button onClick={() => setIsFormBuilderOpen(true)}>
                         Create First Form
                       </Button>
                     )}
