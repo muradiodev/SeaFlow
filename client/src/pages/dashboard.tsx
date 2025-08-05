@@ -17,6 +17,7 @@ import {
   Users
 } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
+import { useLocation } from "wouter";
 
 interface FleetShip {
   id: string;
@@ -34,61 +35,9 @@ interface DashboardStats {
   expiringCertificates: number;
 }
 
-const fleetColumns: ColumnDef<FleetShip>[] = [
-  {
-    accessorKey: "name",
-    header: "Ship Name",
-    cell: ({ row }) => (
-      <div className="flex items-center">
-        <div className="bg-maritime-100 p-2 rounded-lg mr-3">
-          <Ship className="h-4 w-4 text-maritime-600" />
-        </div>
-        <div>
-          <div className="font-medium">{row.getValue("name")}</div>
-          <div className="text-sm text-gray-500">{row.original.shipType}</div>
-        </div>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "imoNumber",
-    header: "IMO",
-  },
-  {
-    accessorKey: "isActive",
-    header: "Status",
-    cell: ({ row }) => (
-      <Badge variant={row.getValue("isActive") ? "default" : "destructive"}>
-        {row.getValue("isActive") ? "Online" : "Offline"}
-      </Badge>
-    ),
-  },
-  {
-    accessorKey: "lastSync",
-    header: "Last Sync",
-    cell: ({ row }) => {
-      const lastSync = row.getValue("lastSync") as string | null;
-      if (!lastSync) return "Never";
-      return new Date(lastSync).toLocaleDateString();
-    },
-  },
-  {
-    id: "actions",
-    header: "Actions",
-    cell: ({ row }) => (
-      <div className="flex space-x-2">
-        <Button variant="ghost" size="sm">
-          View
-        </Button>
-        <Button variant="ghost" size="sm">
-          Notify
-        </Button>
-      </div>
-    ),
-  },
-];
-
 export default function Dashboard() {
+  const [, setLocation] = useLocation();
+
   const { data: stats, isLoading: statsLoading } = useQuery<DashboardStats>({
     queryKey: ["/api/dashboard/stats"],
   });
@@ -96,6 +45,71 @@ export default function Dashboard() {
   const { data: fleet, isLoading: fleetLoading } = useQuery<FleetShip[]>({
     queryKey: ["/api/dashboard/fleet"],
   });
+
+  const fleetColumns: ColumnDef<FleetShip>[] = [
+    {
+      accessorKey: "name",
+      header: "Ship Name",
+      cell: ({ row }) => (
+        <div className="flex items-center">
+          <div className="bg-maritime-100 p-2 rounded-lg mr-3">
+            <Ship className="h-4 w-4 text-maritime-600" />
+          </div>
+          <div>
+            <div className="font-medium">{row.getValue("name")}</div>
+            <div className="text-sm text-gray-500">{row.original.shipType}</div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "imoNumber",
+      header: "IMO",
+    },
+    {
+      accessorKey: "isActive",
+      header: "Status",
+      cell: ({ row }) => (
+        <Badge variant={row.getValue("isActive") ? "default" : "destructive"}>
+          {row.getValue("isActive") ? "Online" : "Offline"}
+        </Badge>
+      ),
+    },
+    {
+      accessorKey: "lastSync",
+      header: "Last Sync",
+      cell: ({ row }) => {
+        const lastSync = row.getValue("lastSync") as string | null;
+        if (!lastSync) return "Never";
+        return new Date(lastSync).toLocaleDateString();
+      },
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => {
+        const ship = row.original;
+        return (
+          <div className="flex space-x-2">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setLocation(`/ships/${ship.id}`)}
+            >
+              View
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setLocation(`/notifications?shipId=${ship.id}`)}
+            >
+              Notify
+            </Button>
+          </div>
+        );
+      },
+    },
+  ];
 
   // Mock data for charts
   const trendData = [

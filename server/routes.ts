@@ -57,6 +57,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/ships/:id", requireAuth, async (req, res) => {
+    try {
+      const ship = await storage.getShip(req.params.id);
+      if (!ship) {
+        return res.status(404).json({ message: "Ship not found" });
+      }
+      res.json(ship);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch ship" });
+    }
+  });
+
   app.post("/api/ships", requireRole(['dpa', 'superintendent']), async (req, res) => {
     try {
       const ship = await storage.createShip(req.body);

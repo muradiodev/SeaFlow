@@ -15,6 +15,7 @@ import Notifications from "@/pages/notifications";
 import Manuals from "@/pages/manuals";
 import Logs from "@/pages/logs";
 import Kpi from "@/pages/kpi";
+import ShipDetails from "@/pages/ship-details";
 import { Sidebar } from "@/components/layout/sidebar";
 
 function Router() {
@@ -67,6 +68,12 @@ function Router() {
         <div className="flex h-screen overflow-hidden">
           <Sidebar />
           <Kpi />
+        </div>
+      )} />
+      <ProtectedRoute path="/ships/:id" component={() => (
+        <div className="flex h-screen overflow-hidden">
+          <Sidebar />
+          <ShipDetails />
         </div>
       )} />
       <Route component={NotFound} />
