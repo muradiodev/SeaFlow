@@ -273,13 +273,24 @@ export default function Documents() {
                   <div className="flex items-center justify-center h-32">
                     <div className="text-gray-500">Loading forms...</div>
                   </div>
-                ) : (
+                ) : recurringForms.length > 0 ? (
                   <DataTable 
                     columns={formColumns} 
                     data={recurringForms} 
                     searchKey="name"
                     searchPlaceholder="Search recurring forms..."
                   />
+                ) : (
+                  <div className="text-center py-12">
+                    <RotateCcw className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No recurring forms</h3>
+                    <p className="text-gray-500 mb-4">There are no recurring forms available yet.</p>
+                    {canCreateForms && (
+                      <Button onClick={() => setIsFormBuilderOpen(true)}>
+                        Create First Form
+                      </Button>
+                    )}
+                  </div>
                 )}
               </div>
             </TabsContent>
